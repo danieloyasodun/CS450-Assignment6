@@ -145,7 +145,7 @@ class App extends Component {
 
     const keys = ["GPT-4", "Gemini", "PaLM-2", "Claude", "LLaMA-3.1"];
 
-    const stack = d3.stack().keys(keys).offset(d3.stackOffsetWiggle);
+    const stack = d3.stack().keys(keys).offset(d3.stackOffsetSilhouette);
     const layers = stack(formattedData);
 
     const x = d3
@@ -186,16 +186,15 @@ class App extends Component {
           month: date.toLocaleString("default", { month: "short" }),
           value: values[model],
         }));
-        //console.log(`Hovered over ${model}:`);
-        //console.log(monthlyValues);
-      
-        // Show the tooltip and update its position
+
         const tooltip = d3.select(".tooltip");
         tooltip
+          .transition()
+          .duration(300)
           .style("display", "block") // Make the tooltip visible
           .style("left", `${event.pageX + 10}px`) // Position the tooltip
           .style("top", `${event.pageY + 10}px`)
-          .style("width", "400px") // Increase tooltip size for mini chart visibility
+          .style("width", "300px") // Increase tooltip size for mini chart visibility
           .style("height", "200px");
 
         // Update the tooltip content with model name and the mini bar chart
@@ -203,7 +202,7 @@ class App extends Component {
 
         // Call the function to draw the mini bar chart inside the tooltip
         this.drawMiniBarChart(monthlyValues, model);
-      })      
+      });      
 
     svg
       .append("g")
